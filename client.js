@@ -12,7 +12,7 @@ const client = new net.Socket()
 client.connect(port, host, () => {
     console.log('connect to: ', host, port)
     // const request = 'data from client'
-    const request = 'HTTP / '
+    const request = 'GET / HTTP/1.1\r\nHost:music.163.com\r\n\r\n'
     client.write(request)
     // setInterval(() => {
     //     client.write('hello in interval')
