@@ -8,11 +8,11 @@ const server = new net.Server()
 // 开启服务器监听连接
 server.listen(port, host, () => {
  // server.address() 返回的是绑定的服务器的 ip 地址、ip 协议、端口号
- console.log('listening, ', server.address())
+ console.log('listening: ', server.address())
 })
 
 server.on('connection', (socket) => {
-    const adddress = socket.remoteAddress
+    const address = socket.remoteAddress
     const port = socket.remotePort
     const family = socket.remoteFamily
     console.log('connected client info', address, port, family)
@@ -23,7 +23,7 @@ server.on('connection', (socket) => {
 
         const response = 'hello World'
         socket.write(response)
-        // socket.destroy()
+        socket.destroy()
     })
 })
 server.on('error', (error) => {
