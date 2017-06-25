@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>message 页面</title>
+</head>
+<body>
+    <form action="/message" method="post">
+        <input type="text" name="author">说
+        <textarea name="content" id="" cols="10" rows="5"></textarea>
+        <button type="submit">POST 提交</button>
+    </form>
+    <pre>{{message}}</pre>
+</body>
+</html>

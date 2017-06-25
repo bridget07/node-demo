@@ -1,32 +1,11 @@
+// 内置模块
 const net = require('net')
 const fs =  require('fs')
 
-const log = (...args) => {
-    console.log.apply(console, args)
-}
-/*
-// 服务器的 host 为空字符串, 表示接受任意 ip 地址的连接
-const host = ''
-const port = 2001
-*/
-
-// 响应函数
-const routeIndex = () => {
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
-    const body = '<h1>HELLO WORLD!</h1><img src="doge.gif">'
-
-    const r = header + body
-    return r
-}
-const routeImage = () => {
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: img/gif\r\n\r\n'
-    const file = 'doge.gif'
-    const body = fs.readFileSync(file)
-
-    const h = Buffer.from(header)
-    const r = Buffer.concat([h, body])
-    return r
-}
+// 自定义模块
+const log = require('./utils')
+const Request = require('./request')
+const routeMapper = require('./routes')
 
 // 出现错误的响应函数
 const error = (code=404) => {
@@ -37,39 +16,82 @@ const error = (code=404) => {
     return r
 }
 
-// 根据请求路径返回相应的响应函数
-const responseForPath = (path) => {
-    const r = {
-        '/': routeIndex,
-        '/doge.gif': routeImage
+// 解析 path
+const parsedPath = path =>{
+    const index = path.indexOf('?')
+    if (index === -1) {
+        return {
+            path: path,
+            query: {}
+        }
+    } else {
+        const l = path.split('?')
+        path = l[0]
+
+        const search = l[1]
+        const args = search.split('$')
+        const query = {}
+        for (let arg of args) {
+            const [k, v] = arg.split('=')
+            query[k] = v
+        }
+        return {
+            path: path,
+            query: query
+        }
     }
-    const response = r[path] || error
-    return response()
 }
 
+// 解析请求原文， 找到对应的响应函数
+const responseFor = (r, request) => {
+    const raw = r
+    const raws = raw.split(' ')
+
+    // request 是自定义的对象，使用这个对象来保存请求的相关信息（method, path, query, body）
+    request.raw = r
+    request.method = raws[0]
+    let pathname = raws[1]
+    let { path, query } = parsedPath(pathname)
+    request.path = path
+    request.query = query
+    request.body = raw.split('\r\n\r\n')[1]
+    log('path and query: ', path, query)
+    // 找到对应的响应函数
+    const route = {}
+    const routes = Object.assign(route, routeMapper)
+    const response =  route[path] || error
+    const resp = response(request)
+    const resp
+}
+
+/*
+ // 服务器的 host 为空字符串, 表示接受任意 ip 地址的连接
+ const host = ''
+ const port = 2001
+ */
 const run = (host='', port=3000) => {
     const server = new net.Server()
     // 开启服务器监听连接
     server.listen(port, host, () => {
         // server.address() 返回的是绑定的服务器的 ip 地址、ip 协议、端口号
-        console.log('listening: ', server.address())
+        const address = server.address()
+        console.log(`listening at http://${address.address}:${address.port}`)
     })
 
     server.on('connection', (socket) => {
-        const address = socket.remoteAddress
-        const port = socket.remotePort
-        const family = socket.remoteFamily
-        console.log('connected client info(address:ipremote)', address, port, family)
+        // const address = socket.remoteAddress
+        // const port = socket.remotePort
+        // const family = socket.remoteFamily
+        // console.log('connected client info(address:ipremote)', address, port, family)
 
         socket.on('data', (data) => {
-            const request = data.toString()
+            const request = new Request()
+            const r = data.toString()
 
             const ipLocal = socket.localAddress
             log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${request}`)
 
-            const path = request.split(' ')[1]
-            log('path: ', path)
-            const response = responseForPath(path)
+            const response = responseFor(r, request)
             socket.write(response)
             socket.destroy()
         })
@@ -85,6 +107,8 @@ const run = (host='', port=3000) => {
 
 
 const __main = () => {
-    run('', 2200)
+    run('', 2300)
 }
+
+//唯一入口
 __main()
