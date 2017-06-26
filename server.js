@@ -42,20 +42,34 @@ const parsedPath = path =>{
     }
 }
 
-// 解析请求原文， 找到对应的响应函数
-const responseFor = (r, request) => {
-    const raw = r
-    const raws = raw.split(' ')
+// 解析请求原始信息
+const parsedRaw = raw => {
+    const r = raw
+    const [ method, url, ...temp ] = r.split(' ')
+    const { path, query } = parsedPath(url)
+    const message = r.split('\r\n\r\n')
+    const headers = message[0].split('\r\n').slice(1)
+    const body = message[1]
 
+    return {
+        method,
+        path,
+        query,
+        headers,
+        body
+    }
+}
+
+// 解析请求原文， 找到对应的响应函数
+const responseFor = (raw, request) => {
+    const r = parsedRaw(raw)
     // request 是自定义的对象，使用这个对象来保存请求的相关信息（method, path, query, body）
-    request.raw = r
-    request.method = raws[0]
-    let pathname = raws[1]
-    let { path, query } = parsedPath(pathname)
-    request.path = path
-    request.query = query
-    request.body = raw.split('\r\n\r\n')[1]
-    log('path and query: ', path, query)
+    request.method = r.method
+    request.path = r.path
+    request.query = r.query
+    request.body = r.body
+    request.addHeaders(r.headers)
+    log('path and query: ', r.path, r.query)
     // 找到对应的响应函数
     const route = {}
     const routes = Object.assign(route, routeMapper)
@@ -75,7 +89,7 @@ const run = (host='', port=3000) => {
     server.listen(port, host, () => {
         // server.address() 返回的是绑定的服务器的 ip 地址、ip 协议、端口号
         const address = server.address()
-        // log(`listening at http://${address.address}:${address.port}`)
+        log(`listening at http://${address.address}:${address.port}`)
     })
 
     server.on('connection', (socket) => {
@@ -87,7 +101,7 @@ const run = (host='', port=3000) => {
         socket.on('data', (data) => {
             const request = new Request()
             const r = data.toString('utf8')
-            request.raw = r
+            // request.raw = r
 
             const ipLocal = socket.localAddress
             log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${r}`)

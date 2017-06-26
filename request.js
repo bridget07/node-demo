@@ -21,6 +21,8 @@ class Request {
         this.path = ''
         this.query = {}
         this.body = ''
+        this.headers = {}
+        this.cookies = {}
     }
 
     // 一般使用 post 方法提交的数据会放在 request body 中

@@ -58,7 +58,7 @@ const register = request => {
             // 如果合法，就保存到文件中
             u.save()
             const us = User.all()
-            result = '注册成功<br><pre>${us}</pre>>'
+            result = `注册成功<br><pre>${us}</pre>`
         } else {
             result = '用户名或者密码长度必须大于2'
         }
@@ -83,6 +83,7 @@ const message = request => {
     let body = template('message.html')
     const ms = Message.all()
     body = body.replace('{{messages}}',  ms)
+    log(' 替换后的 body', body)
     const r = header + body
     return r
 }
