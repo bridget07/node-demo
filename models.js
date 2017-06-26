@@ -2,7 +2,7 @@ const fs = require('fs')
 const log = require('./utils')
 
 const ensureExists = path => {
-    if (!fs.existsSync(path) {
+    if (!fs.existsSync(path)){
         const data = '[]'
         fs.writeFileSync(path, data)
     }
@@ -47,10 +47,57 @@ class Model {
         return ms
     }
 
+    // *************************8
     static create(form={}) {
         const cls = this
         const instance = new cls(form)
         return instance
     }
 
+    save() {
+        // 实例方法中的 this 指向的是实例本身, 也就是 new 出来的那个对象
+        // this.constructor 是指类
+        const cls = this.constructor
+        const models = cls.all()
+        models.push(this)
+        const path = cls.dbPath()
+        save(models, path)
+    }
+
+    toString() {
+        const s = JSON.stringify(this, null, 2)
+        return s
+    }
+}
+
+class User extends Model {
+    constructor(form={}) {
+        super()
+        this.username = form.username || ''
+        this.password = form.password || ''
+    }
+
+    validateLogin() {
+        // log(this, this.username, this.password)
+        return this.username ==='gua' && this.password === '123'
+    }
+
+    validateRegister() {
+        return this.username.length > 2 && this.password.length > 2
+    }
+}
+
+class Message extends Model {
+    constructor(form={}) {
+        super()
+        this.author = form.author || ''
+        this.content = form.content || ''
+        this.extra = 'extra message'
+    }
+}
+
+
+module.exports = {
+    User: User,
+    Message: Message
 }

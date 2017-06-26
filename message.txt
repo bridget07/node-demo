@@ -1,0 +1,12 @@
+[
+  {
+    "author": "gsu",
+    "content": "eded",
+    "extra": "extra message"
+  },
+  {
+    "author": "edede",
+    "content": "efefe",
+    "extra": "extra message"
+  }
+]

@@ -39,6 +39,11 @@ class Request {
         }
         return d
     }
+
+    // toString() {
+    //     const s = JSON.stringify(this, null, 2)
+    //     return s
+    // }
 }
 
 module.exports = Request

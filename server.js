@@ -29,7 +29,7 @@ const parsedPath = path =>{
         path = l[0]
 
         const search = l[1]
-        const args = search.split('$')
+        const args = search.split('&')
         const query = {}
         for (let arg of args) {
             const [k, v] = arg.split('=')
@@ -59,9 +59,9 @@ const responseFor = (r, request) => {
     // 找到对应的响应函数
     const route = {}
     const routes = Object.assign(route, routeMapper)
-    const response =  route[path] || error
+    const response =  routes[path] || error
     const resp = response(request)
-    const resp
+    return resp
 }
 
 /*
@@ -75,7 +75,7 @@ const run = (host='', port=3000) => {
     server.listen(port, host, () => {
         // server.address() 返回的是绑定的服务器的 ip 地址、ip 协议、端口号
         const address = server.address()
-        console.log(`listening at http://${address.address}:${address.port}`)
+        // log(`listening at http://${address.address}:${address.port}`)
     })
 
     server.on('connection', (socket) => {
@@ -86,10 +86,11 @@ const run = (host='', port=3000) => {
 
         socket.on('data', (data) => {
             const request = new Request()
-            const r = data.toString()
+            const r = data.toString('utf8')
+            request.raw = r
 
             const ipLocal = socket.localAddress
-            log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${request}`)
+            log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${r}`)
 
             const response = responseFor(r, request)
             socket.write(response)

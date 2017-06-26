@@ -6,7 +6,7 @@ const User = models.User
 const Message = models.Message
 
 // 保存 message 信息
-const MessageList = []
+const messageList = []
 
 // 读取 html 文件的函数
 const template = (name) => {
@@ -33,7 +33,7 @@ const login = request => {
         // 获取表单中的数据， 生成 User 实例
         const form = request.form()
         const u = User.create(form)
-        if (u.ValidateLogin()) {
+        if (u.validateLogin()) {
             result = '登录成功'
         } else {
             result = '用户名或者密码错误'
@@ -54,7 +54,7 @@ const register = request => {
     if (request.method === 'POST') {
         const form = request.form()
         const u = User.create(form)
-        if (u.ValidateRegister()) {
+        if (u.validateRegister()) {
             // 如果合法，就保存到文件中
             u.save()
             const us = User.all()
