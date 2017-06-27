@@ -26,8 +26,8 @@ const load = path => {
 }
 
 // 定义一个 Model 类，基类，可以被其他类继承
-class Model {
     // 返回一个 db 文件的路径（数据文件的文件名）
+class Model {
     static dbPath() {
         // 这是一个字符串形式的类名
         const classname = this.name.toLowerCase()
@@ -135,7 +135,7 @@ class User extends Model {
     }
 
     validateLogin() {
-        // log(this, this.username, this.password)
+        log(this, this.username, this.password)
         const u = User.findOne('username', this.username)
         return u !== null && u.password === this.password
     }

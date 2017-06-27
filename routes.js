@@ -129,7 +129,7 @@ const message = request => {
         const m = Message.create(form)
         m.save()
     }
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
     let body = template('message.html')
     const ms = Message.all()
     body = body.replace('{{messages}}',  ms)
