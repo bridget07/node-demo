@@ -64,6 +64,62 @@ class Model {
         save(models, path)
     }
 
+    // 根据username 查找一个实例
+    static findOne(key, value) {
+        const all = this.all()
+        let model = null
+        all.forEach(m => {
+            if (m[key] === value) {
+                model = m
+                // foreach 不支持break
+                return false
+            }
+        })
+        return model
+    }
+
+    // 根据username 查找所有实例
+    static find(key, value) {
+        const all = this.all()
+        let models = []
+        all.forEach(m => {
+            if (m[key] === value) {
+                models.push(m)
+            }
+        })
+        return models
+    }
+
+    // 保存时加上id 信息
+    save() {
+        const cls = this.constructor
+        const models = cls.all()
+        if (this.id === undefined) {
+            // 这条数据原本没有ID信息
+            if (models.length > 0) {
+                const last = models[models.length - 1]
+                this.id = last.id + 1
+            } else {
+                this.id = 0
+            }
+            models.push(this)
+        } else {
+            // 这条数据原本有ID信息，则替换掉相同id 的之前内容
+            let index = -1
+            models.forEach((m, i) => {
+                if (m.id === this.id) {
+                    index = i
+                    return false
+                }
+            })
+            if (index > -1) {
+                models[index] = this
+            }
+        }
+        const path = cls.dbPath()
+        save(models, path)
+    }
+
     toString() {
         const s = JSON.stringify(this, null, 2)
         return s
@@ -75,11 +131,13 @@ class User extends Model {
         super()
         this.username = form.username || ''
         this.password = form.password || ''
+        this.id = form.id
     }
 
     validateLogin() {
         // log(this, this.username, this.password)
-        return this.username ==='gua' && this.password === '123'
+        const u = User.findOne('username', this.username)
+        return u !== null && u.password === this.password
     }
 
     validateRegister() {

@@ -5,8 +5,26 @@ const models = require('./models')
 const User = models.User
 const Message = models.Message
 
-// 保存 message 信息
-const messageList = []
+// 保存 session 信息
+const session = {}
+
+// 后台保存 session 信息
+const randomStr = () => {
+    const seed = 'qwertyuiopasdfghjklzxcvbnm1234567890a'
+    let s = ''
+    for (let i = 0; i < 16; i++) {
+        const random = Math.random() * seed.length
+        const index = Math.floor(random)
+        s += seed[index]
+    }
+}
+
+// 验证当前用户
+const currentUser = request => {
+    const id = request.cookies.user || ''
+    const username = session[id] || '游客'
+    return username
+}
 
 // 读取 html 文件的函数
 const template = (name) => {
@@ -18,11 +36,29 @@ const template = (name) => {
     return content
 }
 
+const headerFromMapper = (mapper={}) => {
+    let base = 'HTTP/1.1 200 OK\r\n'
+    const keys = Object.keys(mapper)
+    const s = keys.map(k => {
+        const v = mapper[k]
+        const h = `${k}: ${v}\r\n`
+        return h
+    }).join('')
+    const header = base + s
+    return header
+})
+
 // 返回响应
 const index = () => {
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
-    const body = template('index.html')
-    const r = header + body
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    const headers = {
+        'Content-Type': 'text/html',
+    }
+    const header = headerFromMapper(headers)
+    let body = template('index.html')
+    const username = currentUser(request)
+    body = body.replace('{{username}}', username)
+    const r = header + '\r\n' + body
     return r
 }
 
@@ -34,6 +70,9 @@ const login = request => {
         const form = request.form()
         const u = User.create(form)
         if (u.validateLogin()) {
+            const sid = randomStr()
+            session[sid] = u.username
+            headers['Set-Cookie'] = `user=${sid}`
             result = '登录成功'
         } else {
             result = '用户名或者密码错误'
@@ -41,10 +80,16 @@ const login = request => {
     } else {
         result = ''
     }
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    const headers = {
+        'Content-Type': 'text/html',
+    }
+    const username = currentUser(request)
     let body = template('login.html')
     body = body.replace('{{result}}',  result)
-    const r = header + body
+    body = body.replace('{{username}}',  username)
+    const header = headerFromMapper(headers)
+    const r = header + '\r\n' + body
     return r
 }
 
@@ -65,10 +110,14 @@ const register = request => {
     } else {
         result = ''
     }
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
     let body = template('register.html')
     body = body.replace('{{result}}',  result)
-    const r = header + body
+    const headers = {
+        'Content-Type': 'text/html',
+    }
+    const header = headerFromMapper(headers)
+    const r = header + '\r\n' + body
     return r
 }
 
@@ -83,8 +132,12 @@ const message = request => {
     let body = template('message.html')
     const ms = Message.all()
     body = body.replace('{{messages}}',  ms)
-    log(' 替换后的 body', body)
-    const r = header + body
+    // log(' 替换后的 body', body)
+    const headers = {
+        'Content-Type': 'text/html',
+    }
+    const header = headerFromMapper(headers)
+    const r = header + '\r\n' + body
     return r
 }
 
@@ -93,9 +146,10 @@ const  static = (request) => {
     const filename = request.query.file || 'doge.gif'
     const path = `static/${filename}`
     const body = fs.readFileSync(path)
-    const header = 'HTTP/1.1 200 OK\r\nContent-Type: img/gif\r\n\r\n'
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: img/gif\r\n\r\n'
+    const header = headerFromMapper()
 
-    const h = Buffer.from(header)
+    const h = Buffer.from(header + '\r\n')
     const r = Buffer.concat([h, body])
     return r
 }
