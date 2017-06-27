@@ -17,6 +17,7 @@ const randomStr = () => {
         const index = Math.floor(random)
         s += seed[index]
     }
+    return s
 }
 
 // 验证当前用户

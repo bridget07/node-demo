@@ -54,15 +54,15 @@ class Model {
         return instance
     }
 
-    save() {
-        // 实例方法中的 this 指向的是实例本身, 也就是 new 出来的那个对象
-        // this.constructor 是指类
-        const cls = this.constructor
-        const models = cls.all()
-        models.push(this)
-        const path = cls.dbPath()
-        save(models, path)
-    }
+    // save() {
+    //     // 实例方法中的 this 指向的是实例本身, 也就是 new 出来的那个对象
+    //     // this.constructor 是指类
+    //     const cls = this.constructor
+    //     const models = cls.all()
+    //     models.push(this)
+    //     const path = cls.dbPath()
+    //     save(models, path)
+    // }
 
     // 根据username 查找一个实例
     static findOne(key, value) {

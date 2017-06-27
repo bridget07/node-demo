@@ -45,7 +45,7 @@ const parsedPath = path =>{
 // 解析请求原始信息
 const parsedRaw = raw => {
     const r = raw
-    const [ method, url, ..._ ] = r.split(' ')
+    const [method, url, ..._] = r.split(' ')
     const { path, query } = parsedPath(url)
     const message = r.split('\r\n\r\n')
     const headers = message[0].split('\r\n').slice(1)
@@ -122,7 +122,7 @@ const run = (host='', port=3000) => {
 
 
 const __main = () => {
-    run('', 2300)
+    run('127.0.0.1', 2300)
 }
 
 //唯一入口
