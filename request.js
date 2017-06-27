@@ -1,3 +1,4 @@
+const log = require('./utils')
 // 请求的原始信息
 /*
 GET /login HTTP/1.1
@@ -23,6 +24,25 @@ class Request {
         this.body = ''
         this.headers = {}
         this.cookies = {}
+    }
+
+    addCookies() {
+        const cookies = this.headers.Cookie || ''
+        const pairs = cookies.split('; ')
+        pairs.forEach(pair => {
+            if (pair.includes('=')) {
+                const [k, v] = pair.split('=')
+                this.cookies[k] = v
+            }
+        })
+    }
+
+    addHeaders(headers) {
+        headers.forEach(header => {
+            const [k, v] = header.split(': ')
+            this.headers[k] = v
+        })
+        this.addCookies()
     }
 
     // 一般使用 post 方法提交的数据会放在 request body 中
