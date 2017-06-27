@@ -154,6 +154,15 @@ class Message extends Model {
     }
 }
 
+const test = () => {
+    const form = {
+        username: 'gua',
+        password: '123'
+    }
+    const u = User.create(form)
+    u.save()
+}
+test()
 
 module.exports = {
     User: User,
