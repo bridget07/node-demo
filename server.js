@@ -45,7 +45,7 @@ const parsedPath = path =>{
 // 解析请求原始信息
 const parsedRaw = raw => {
     const r = raw
-    const [ method, url, ...temp ] = r.split(' ')
+    const [ method, url, ..._ ] = r.split(' ')
     const { path, query } = parsedPath(url)
     const message = r.split('\r\n\r\n')
     const headers = message[0].split('\r\n').slice(1)
