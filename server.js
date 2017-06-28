@@ -44,10 +44,10 @@ const parsedPath = path =>{
 
 // 解析请求原始信息
 const parsedRaw = raw => {
-    const r = raw
-    const [method, url, ..._] = r.split(' ')
+    // const r = raw
+    const [method, url, ..._] = raw.split(' ')
     const { path, query } = parsedPath(url)
-    const message = r.split('\r\n\r\n')
+    const message = raw.split('\r\n\r\n')
     const headers = message[0].split('\r\n').slice(1)
     const body = message[1]
 
@@ -62,10 +62,15 @@ const parsedRaw = raw => {
 
 // 解析请求原文， 找到对应的响应函数
 const responseFor = (raw, request) => {
+    // log('***debug raw request,', raw, request)
+
     const r = parsedRaw(raw)
+    // log('***debug r,', r)
+
     // request 是自定义的对象，使用这个对象来保存请求的相关信息（method, path, query, body）
     request.method = r.method
     request.path = r.path
+    // log('***debug path,', request.path)
     request.query = r.query
     request.body = r.body
     request.addHeaders(r.headers)
@@ -73,7 +78,7 @@ const responseFor = (raw, request) => {
     // 找到对应的响应函数
     const route = {}
     const routes = Object.assign(route, routeMapper)
-    const response =  routes[path] || error
+    const response =  routes[r.path] || error
     const resp = response(request)
     return resp
 }
@@ -100,13 +105,13 @@ const run = (host='', port=3000) => {
 
         socket.on('data', (data) => {
             const request = new Request()
-            const r = data.toString('utf8')
+            const raw = data.toString('utf8')
             // request.raw = r
 
             const ipLocal = socket.localAddress
-            log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${r}`)
+            log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${raw}`)
 
-            const response = responseFor(r, request)
+            const response = responseFor(raw, request)
             socket.write(response)
             socket.destroy()
         })
@@ -127,3 +132,4 @@ const __main = () => {
 
 //唯一入口
 __main()
+

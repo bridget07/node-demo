@@ -47,10 +47,10 @@ const headerFromMapper = (mapper={}) => {
     }).join('')
     const header = base + s
     return header
-})
+}
 
 // 返回响应
-const index = () => {
+const index = (request) => {
     // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
     const headers = {
         'Content-Type': 'text/html',
@@ -66,6 +66,10 @@ const index = () => {
 // login
 const login = request => {
     let result
+    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
+    const headers = {
+        'Content-Type': 'text/html',
+    }
     if (request.method === 'POST') {
         // 获取表单中的数据， 生成 User 实例
         const form = request.form()
@@ -81,10 +85,7 @@ const login = request => {
     } else {
         result = ''
     }
-    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
-    const headers = {
-        'Content-Type': 'text/html',
-    }
+
     const username = currentUser(request)
     let body = template('login.html')
     body = body.replace('{{result}}',  result)
