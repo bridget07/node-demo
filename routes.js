@@ -60,6 +60,7 @@ const index = (request) => {
     const username = currentUser(request)
     body = body.replace('{{username}}', username)
     const r = header + '\r\n' + body
+    log('debug session index', session)
     return r
 }
 
@@ -92,6 +93,7 @@ const login = request => {
     body = body.replace('{{username}}',  username)
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
+    log('debug session login', session)
     return r
 }
 
@@ -120,6 +122,7 @@ const register = request => {
     }
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
+    log('debug session register', session)
     return r
 }
 
@@ -140,6 +143,7 @@ const message = request => {
     }
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
+    log('debug session message', session)
     return r
 }
 

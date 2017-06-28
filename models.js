@@ -154,6 +154,7 @@ class Message extends Model {
     }
 }
 
+/*
 const test = () => {
     const form = {
         username: 'gua',
@@ -163,6 +164,7 @@ const test = () => {
     u.save()
 }
 test()
+*/
 
 module.exports = {
     User: User,
