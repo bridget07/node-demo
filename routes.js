@@ -10,7 +10,7 @@ const session = {}
 
 // 后台保存 session 信息
 const randomStr = () => {
-    const seed = 'qwertyuiopasdfghjklzxcvbnm1234567890a'
+    const seed = 'qwertyuiopasdfghjklzxcvbnm1234567890'
     let s = ''
     for (let i = 0; i < 16; i++) {
         const random = Math.random() * seed.length
