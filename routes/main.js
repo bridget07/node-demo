@@ -59,7 +59,7 @@ const redirect = url => {
         Location: url,
     }
     const header = headerFromMapper(headers, 302)
-    const r = header + '\r\n'
+    const r = header + '\r\n' + ''
     return r
 }
 

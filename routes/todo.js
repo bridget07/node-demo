@@ -16,7 +16,7 @@ const index = request => {
     const headers = {
         'Content-Type': 'text/html',
     }
-    let body = template('message.html')
+    let body = template('todo_index.html')
     const u = currentUser(request)
     const models = Todo.find('user_id', u.id)
     const todos = models.map(m => {
@@ -38,7 +38,7 @@ const index = request => {
 const add = request => {
     if (request.method === 'POST') {
         const form = request.form()
-        const u = currentUser(reqeust)
+        const u = currentUser(request)
         form.user_id = u.id
         const t = Todo.create(form)
         t.save()
@@ -47,7 +47,7 @@ const add = request => {
 }
 
 const edit = request => {
-    const u = currentUser(reqeust)
+    const u = currentUser(request)
 
     const id = Number(request.query.id)
     const headers = {
@@ -63,7 +63,7 @@ const edit = request => {
 }
 
 const del = request => {
-    const id = Number(reqeust.query.id)
+    const id = Number(request.query.id)
     Todo.remove(id)
     return redirect('/todo')
 }

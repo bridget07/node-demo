@@ -10,7 +10,7 @@ class Todo extends Model {
         this.id = form.id
         this.title = form.title || ''
         this.done = false
-        thid.user_id = form.user_id
+        this.user_id = form.user_id
     }
      static update(form) {
         const id = Number(form.id)
