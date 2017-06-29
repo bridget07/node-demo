@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { log } = require('./utils')
+const { log } = require('../utils')
 
 const ensureExists = path => {
     if (!fs.existsSync(path)){

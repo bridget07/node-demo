@@ -2,7 +2,7 @@
  * Created by gsh on 2017/6/29.
  */
 const fs = require('fs')
-const { log} = require('../utils')
+// const { log } = require('../utils')
 
 const {
     session,
@@ -30,7 +30,7 @@ const index = (request) => {
 // 静态资源的处理(图片)
 const  static = (request) => {
     const filename = request.query.file || 'doge.gif'
-    const path = `../static/${filename}`
+    const path = `static/${filename}`
     const body = fs.readFileSync(path)
     // const header = 'HTTP/1.1 200 OK\r\nContent-Type: img/gif\r\n\r\n'
     const header = headerFromMapper()

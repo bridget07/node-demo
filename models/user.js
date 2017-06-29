@@ -3,6 +3,9 @@
  */
 const Model = require('./main')
 
+const { log } = require('../utils')
+
+
 class User extends Model {
     constructor(form={}) {
         super()

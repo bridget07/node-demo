@@ -1,7 +1,7 @@
 const fs = require('fs')
-const { log } = require('./utils')
+const { log } = require('../utils')
 
-const User = require('./models/user')
+const User = require('../models/user')
 
 
 // 保存 session 信息
@@ -58,7 +58,7 @@ const redirect = url => {
     const headers = {
         Location: url,
     }
-    const headers = headerFromMapper(headers, 302)
+    const header = headerFromMapper(headers, 302)
     const r = header + '\r\n'
     return r
 }
@@ -70,7 +70,7 @@ const loginRequired = routeFunc => {
         if (u === null) {
             return redirect('/login')
         } else {
-            return toureFunc(request)
+            return routeFunc(request)
         }
     }
     return func

@@ -47,7 +47,7 @@ const login = request => {
     return r
 }
 
-/ register
+// register
 const register = request => {
     let result
     if (request.method === 'POST') {

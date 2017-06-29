@@ -3,9 +3,15 @@ const net = require('net')
 const fs =  require('fs')
 
 // 自定义模块
-const log = require('./utils')
+const { log } = require('./utils')
 const Request = require('./request')
-const routeMapper = require('./routes')
+
+const routeIndex = require('./routes/index')
+const routeUser = require('./routes/user')
+const routeMessage= require('./routes/message')
+const routeTodo = require('./routes/todo')
+
+
 
 // 出现错误的响应函数
 const error = (code=404) => {
@@ -20,25 +26,25 @@ const error = (code=404) => {
 // 解析请求原文， 找到对应的响应函数
 const responseFor = (raw, request) => {
     // log('***debug raw request,', raw, request)
-
-    const r = parsedRaw(raw)
-    // log('***debug r,', r)
-
-    // request 是自定义的对象，使用这个对象来保存请求的相关信息（method, path, query, body）
-    request.method = r.method
-    request.path = r.path
-    // log('***debug path,', request.path)
-    request.query = r.query
-    request.body = r.body
-    request.addHeaders(r.headers)
-    log('path and query: ', r.path, r.query)
     // 找到对应的响应函数
     const route = {}
-    const routes = Object.assign(route, routeMapper)
-    const response =  routes[r.path] || error
+    const routes = Object.assign(route, routeIndex, routeUser, routeMessage, routeTodo)
+    const response =  routes[request.path] || error
     const resp = response(request)
     return resp
 }
+
+const processRequest = (data, socket) => {
+    const raw = data.toString('utf8')
+    const request = new Request(raw)
+    const ip = socket.localAddress
+    log(`ip and request, ${ip}\n${raw}`)
+
+    const response = responseFor(raw, request)
+    socket.write(response)
+    socket.destroy()
+}
+
 
 /*
  // 服务器的 host 为空字符串, 表示接受任意 ip 地址的连接
@@ -54,24 +60,15 @@ const run = (host='', port=3000) => {
         log(`listening at http://${address.address}:${address.port}`)
     })
 
-    server.on('connection', (socket) => {
+    server.on('connection', (s) => {
         // const address = socket.remoteAddress
         // const port = socket.remotePort
         // const family = socket.remoteFamily
         // console.log('connected client info(address:ipremote)', address, port, family)
-
-        socket.on('data', (data) => {
-            const request = new Request()
-            const raw = data.toString('utf8')
-            // request.raw = r
-
-            const ipLocal = socket.localAddress
-            log(`ipLocal and request, ipLocal 的值: ${ipLocal}\nrequest 的内容\n${raw}`)
-
-            const response = responseFor(raw, request)
-            socket.write(response)
-            socket.destroy()
+        s.on('data', data => {
+            processRequest(data, s)
         })
+
     })
     server.on('error', (error) => {
         console.log('server error', error)
@@ -87,6 +84,7 @@ const __main = () => {
     run('127.0.0.1', 2300)
 }
 
-//唯一入口
-__main()
+if (require.main === module) {
+    __main()
+}
 

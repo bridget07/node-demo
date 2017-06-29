@@ -1,7 +1,7 @@
 /**
  * Created by gsh on 2017/6/29.
  */
-const log = require('../utils')
+const { log } = require('../utils')
 const {
     session,
     currentUser,
@@ -17,7 +17,7 @@ const index = request => {
         'Content-Type': 'text/html',
     }
     let body = template('message.html')
-    const u = currentUser(reqeust)
+    const u = currentUser(request)
     const models = Todo.find('user_id', u.id)
     const todos = models.map(m => {
         const t = `
@@ -78,7 +78,7 @@ const update = request => {
 
 const routeMapper = {
     '/todo': loginRequired(index),
-    'todo/add': add,
+    '/todo/add': add,
     '/todo/delete': del,
     '/todo/edit': edit,
     '/todo/update': update

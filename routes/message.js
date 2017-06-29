@@ -2,7 +2,7 @@
  * Created by gsh on 2017/6/29.
  */
 const fs = require('fs')
-const { log} = require('../utils')
+const { log } = require('../utils')
 
 const {
     session,
@@ -30,7 +30,7 @@ const message = request => {
     }
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
-    log('debug session message', session)
+    // log('debug session message', session)
     return r
 }
 
