@@ -1,5 +1,5 @@
 const fs = require('fs')
-const log = require('./utils')
+const { log } = require('./utils')
 
 const ensureExists = path => {
     if (!fs.existsSync(path)){
@@ -73,15 +73,22 @@ class Model {
     // 根据username 查找一个实例
     static findOne(key, value) {
         const all = this.all()
-        let model = null
-        all.forEach(m => {
-            if (m[key] === value) {
-                model = m
-                // foreach 不支持break
-                return false
-            }
+        // let model = null
+        // all.forEach(m => {
+        //     if (m[key] === value) {
+        //         model = m
+        //         // foreach 不支持break
+        //         return false
+        //     }
+        // })
+        // return model
+        let m = all.find(e => {
+            return e[key] === value
         })
-        return model
+        if (m === undefined) {
+            m = null
+        }
+        return m
     }
 
     // 根据username 查找所有实例
@@ -94,6 +101,12 @@ class Model {
             }
         })
         return models
+    }
+
+    static get(id) {
+        id = parseInt(id, 10)
+        // log('')
+        return this.findOne('id', id)
     }
 
     // 保存时加上id 信息
@@ -126,53 +139,22 @@ class Model {
         save(models, path)
     }
 
+    static remove(id) {
+        const models = this.all()
+        const index = models.findIndex(e => {
+            return e.id === id
+        })
+        if (index > -1) {
+            models.splice(index, 1)
+        }
+        const path = this.dbPath()
+        save(models, path)
+    }
+
     toString() {
         const s = JSON.stringify(this, null, 2)
         return s
     }
 }
 
-class User extends Model {
-    constructor(form={}) {
-        super()
-        this.username = form.username || ''
-        this.password = form.password || ''
-        this.id = form.id
-    }
-
-    validateLogin() {
-        log(this, this.username, this.password)
-        const u = User.findOne('username', this.username)
-        return u !== null && u.password === this.password
-    }
-
-    validateRegister() {
-        return this.username.length > 2 && this.password.length > 2
-    }
-}
-
-class Message extends Model {
-    constructor(form={}) {
-        super()
-        this.author = form.author || ''
-        this.content = form.content || ''
-        this.extra = 'extra message'
-    }
-}
-
-/*
-const test = () => {
-    const form = {
-        username: 'gua',
-        password: '123'
-    }
-    const u = User.create(form)
-    u.save()
-}
-test()
-*/
-
-module.exports = {
-    User: User,
-    Message: Message
-}
+module.exports = Model
