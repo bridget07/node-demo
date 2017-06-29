@@ -94,7 +94,7 @@ class Request {
     _parsedRaw (raw) {
     // const r = raw
     const [method, url, ..._] = raw.split(' ')
-    const { path, query } = parsedPath(url)
+    const { path, query } = this._parsedPath(url)
     const message = raw.split('\r\n\r\n')
     const headers = message[0].split('\r\n').slice(1)
     const body = message[1]
