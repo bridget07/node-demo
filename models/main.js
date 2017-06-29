@@ -31,8 +31,14 @@ class Model {
     static dbPath() {
         // 这是一个字符串形式的类名
         const classname = this.name.toLowerCase()
-        const path = `${classname}.txt`
-        return path
+        // const path = `${classname}.txt`
+        // return path
+        //***************
+        const path = require('path')
+        const filename = `${classname}.txt`
+        // 使用绝对路径保证路径
+        const p = path.join(__dirname, '../db', filename)
+        return p
     }
 
     // 获取一个类 的所有实例

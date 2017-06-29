@@ -1,4 +1,4 @@
-const log = require('./utils')
+const { log } = require('./utils')
 // 请求的原始信息
 /*
 GET /login HTTP/1.1
@@ -16,14 +16,16 @@ Accept-Language: zh-CN,zh;q=0.8
 
 class Request {
     // 构造器函数
-    constructor() {
-        this.raw = ''
-        this.method = 'GET'
-        this.path = ''
-        this.query = {}
-        this.body = ''
+    constructor(raw) {
+        const { method, path, query, headers, body } = this._parsedRaw(raw)
+        this.raw = raw
+        this.method = method
+        this.path = path
+        this.query = query
+        this.body = body
         this.headers = {}
         this.cookies = {}
+        this.addHeaders(headers)
     }
 
     addCookies() {
@@ -61,6 +63,50 @@ class Request {
         }
         return d
     }
+
+    // 解析 path
+    _parsedPath (path) {
+        const index = path.indexOf('?')
+        if (index === -1) {
+            return {
+                path: path,
+                query: {}
+            }
+        } else {
+            const l = path.split('?')
+            path = l[0]
+
+            const search = l[1]
+            const args = search.split('&')
+            const query = {}
+            for (let arg of args) {
+                const [k, v] = arg.split('=')
+                query[k] = v
+            }
+            return {
+                path: path,
+                query: query
+            }
+        }
+    }
+
+    // 解析请求原始信息
+    _parsedRaw (raw) {
+    // const r = raw
+    const [method, url, ..._] = raw.split(' ')
+    const { path, query } = parsedPath(url)
+    const message = raw.split('\r\n\r\n')
+    const headers = message[0].split('\r\n').slice(1)
+    const body = message[1]
+
+    return {
+        method,
+        path,
+        query,
+        headers,
+        body
+    }
+}
 
     // toString() {
     //     const s = JSON.stringify(this, null, 2)

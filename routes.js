@@ -8,17 +8,7 @@ const Message = models.Message
 // 保存 session 信息
 const session = {}
 
-// 后台保存 session 信息
-const randomStr = () => {
-    const seed = 'qwertyuiopasdfghjklzxcvbnm1234567890'
-    let s = ''
-    for (let i = 0; i < 16; i++) {
-        const random = Math.random() * seed.length
-        const index = Math.floor(random)
-        s += seed[index]
-    }
-    return s
-}
+
 
 // 验证当前用户
 const currentUser = request => {

@@ -16,49 +16,6 @@ const error = (code=404) => {
     return r
 }
 
-// 解析 path
-const parsedPath = path =>{
-    const index = path.indexOf('?')
-    if (index === -1) {
-        return {
-            path: path,
-            query: {}
-        }
-    } else {
-        const l = path.split('?')
-        path = l[0]
-
-        const search = l[1]
-        const args = search.split('&')
-        const query = {}
-        for (let arg of args) {
-            const [k, v] = arg.split('=')
-            query[k] = v
-        }
-        return {
-            path: path,
-            query: query
-        }
-    }
-}
-
-// 解析请求原始信息
-const parsedRaw = raw => {
-    // const r = raw
-    const [method, url, ..._] = raw.split(' ')
-    const { path, query } = parsedPath(url)
-    const message = raw.split('\r\n\r\n')
-    const headers = message[0].split('\r\n').slice(1)
-    const body = message[1]
-
-    return {
-        method,
-        path,
-        query,
-        headers,
-        body
-    }
-}
 
 // 解析请求原文， 找到对应的响应函数
 const responseFor = (raw, request) => {
