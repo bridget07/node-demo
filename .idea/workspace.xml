@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5be9b43a-a9b1-4b88-a0d2-39c6061aa987" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/models/models.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/server.js" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/message.txt" afterPath="$PROJECT_DIR$/db/message.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/user.txt" afterPath="$PROJECT_DIR$/db/user.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/request.js" afterPath="$PROJECT_DIR$/request.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes.js" afterPath="$PROJECT_DIR$/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.js" afterPath="$PROJECT_DIR$/utils.js" />
-    </list>
+    <list default="true" id="5be9b43a-a9b1-4b88-a0d2-39c6061aa987" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -316,12 +307,12 @@
       <workItem from="1498616572972" duration="507000" />
       <workItem from="1498617444429" duration="2945000" />
       <workItem from="1498620523762" duration="10504000" />
-      <workItem from="1498695265637" duration="2022000" />
+      <workItem from="1498695265637" duration="2177000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15978000" />
+    <option name="totallyTimeSpent" value="16133000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="678" y="89" width="829" height="691" extended-state="0" />
