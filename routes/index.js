@@ -2,7 +2,7 @@
  * Created by gsh on 2017/6/29.
  */
 const fs = require('fs')
-// const { log } = require('../utils')
+const { log } = require('../utils')
 
 const {
     session,
@@ -23,7 +23,7 @@ const index = (request) => {
     const username = u ? u.username: ''
     body = body.replace('{{username}}', username)
     const r = header + '\r\n' + body
-    // log('debug session index', session)
+    log('debug  index', request.method)
     return r
 }
 
