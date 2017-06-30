@@ -60,28 +60,9 @@ class Model {
         return instance
     }
 
-    // save() {
-    //     // 实例方法中的 this 指向的是实例本身, 也就是 new 出来的那个对象
-    //     // this.constructor 是指类
-    //     const cls = this.constructor
-    //     const models = cls.all()
-    //     models.push(this)
-    //     const path = cls.dbPath()
-    //     save(models, path)
-    // }
-
     // 根据username 查找一个实例
     static findOne(key, value) {
         const all = this.all()
-        // let model = null
-        // all.forEach(m => {
-        //     if (m[key] === value) {
-        //         model = m
-        //         // foreach 不支持break
-        //         return false
-        //     }
-        // })
-        // return model
         let m = all.find(e => {
             return e[key] === value
         })
@@ -94,6 +75,7 @@ class Model {
     // 根据username 查找所有实例
     static find(key, value) {
         const all = this.all()
+        log('****debug all', all)
         let models = []
         all.forEach(m => {
             if (m[key] === value) {

@@ -1,18 +1,6 @@
 const { log } = require('./utils')
 // 请求的原始信息
-/*
-GET /login HTTP/1.1
-Host: 127.0.0.1:5000
-Connection: keep-alive
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp
-Referer: http://127.0.0.1:5000/
-Accept-Encoding: gzip, deflate, sdch, br
-Accept-Language: zh-CN,zh;q=0.8
 
-
-*/
 
 class Request {
     // 构造器函数

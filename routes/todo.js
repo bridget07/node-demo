@@ -16,20 +16,15 @@ const index = request => {
     const headers = {
         'Content-Type': 'text/html',
     }
-    let body = template('todo_index.html')
+
     const u = currentUser(request)
+    log('*****debug, u', u)
     const models = Todo.find('user_id', u.id)
-    const todos = models.map(m => {
-        const t = `
-            <div>
-                ${m.title}
-                <a href="/todo/edit?id=${m.id}">编辑</a>
-                <a href="/todo/delete?id=${m.id}">删除</a>
-            </div>
-        `
-        return t
-    })  .join('')
-    body = body.replace('{{todos}}', todos)
+    log('*****debug, models', models)
+    const body = template('todo_index.html', {
+        todos: models,
+    })
+
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
     return r
@@ -48,15 +43,14 @@ const add = request => {
 
 const edit = request => {
     const u = currentUser(request)
-
     const id = Number(request.query.id)
     const headers = {
         'Content-Type': 'text/html',
     }
-    let body = template('todo_edit.html')
     const todo = Todo.get(id)
-    body = body.replace('{{todo_id}}', todo.id)
-    body = body.replace('{{todo_title}}', todo.title)
+    const body = template('todo_edit.html', {
+        todo: todo
+    })
     const header = headerFromMapper(headers)
     const r = header + '\r\n' + body
     return r
@@ -71,6 +65,8 @@ const del = request => {
 const update = request => {
     if (request.method === 'POST') {
         const form = request.form()
+        form.id = request.headers.Referer.split('=')[1]
+        // log('***debug request', request)
         Todo.update(form)
     }
     return redirect('/todo')

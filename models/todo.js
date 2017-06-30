@@ -1,6 +1,7 @@
 /**
  * Created by gsh on 2017/6/29.
  */
+const { log } = require('../utils')
 
 const Model = require('./main')
 
@@ -13,10 +14,12 @@ class Todo extends Model {
         this.user_id = form.user_id
     }
      static update(form) {
-        const id = Number(form.id)
+         // log('***debug0,form', form)
+         const id = Number(form.id)
         const t = this.get(id)
+         // log('***debug1, t', t)
         t.title = form.title
-        t.save()
+         t.save()
     }
 }
 

@@ -15,15 +15,16 @@ class User extends Model {
         this.note = form.note || ''
     }
 
-    validateLogin() {
-        log(this, this.username, this.password)
-        const u = User.findOne('username', this.username)
-        return u !== null && u.password === this.password
+    static validateLogin(form={}) {
+        const { username, password } = form
+        const u = User.findOne('username', username)
+        return u !== null && u.password === password
     }
 
-    validateRegister() {
-        const validForm = this.username.length > 2 && this.password.length > 2
-        const uniqueUser = User.findOne('username', this.username) === null
+    static validateRegister(form) {
+        const { username, password } = form
+        const validForm = username.length > 2 && password.length > 2
+        const uniqueUser = User.findOne('username', username) === null
         return validForm && uniqueUser
     }
 }

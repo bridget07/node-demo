@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { log } = require('../utils')
+const nunjucks = require('nunjucks')
 
 const User = require('../models/user')
 
@@ -7,6 +8,12 @@ const User = require('../models/user')
 // 保存 session 信息
 const session = {}
 
+// 配置 nunjucks
+const loader = new nunjucks.FileSystemLoader('templates', {
+    noCache: true
+})
+
+const env = new nunjucks.Environment(loader)
 
 
 // 验证当前用户
@@ -18,13 +25,9 @@ const currentUser = request => {
 }
 
 // 读取 html 文件的函数
-const template = (name) => {
-    const path = 'templates/' + name
-    const options = {
-        encoding: 'utf8'
-    }
-    const content = fs.readFileSync(path, options)
-    return content
+const template = (path, data) => {
+    const s = env.render(path, data)
+    return s
 }
 
 const headerFromMapper = (mapper={}, code=200) => {
@@ -59,7 +62,7 @@ const redirect = url => {
         Location: url,
     }
     const header = headerFromMapper(headers, 302)
-    const r = header + '\r\n' + ''
+    const r = header + '\r\n'
     return r
 }
 

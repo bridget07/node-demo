@@ -14,7 +14,7 @@ const routeTodo = require('./routes/todo')
 
 
 // 出现错误的响应函数
-const error = (code=404) => {
+const error = (request=null, code=404) => {
     const e = {
         404: 'HTTP/1.1 404 NOT FOUND\r\n\r\n<h1>Not Found</h1>'
     }

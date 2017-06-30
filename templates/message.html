@@ -10,6 +10,11 @@
         <textarea name="content" id="" cols="10" rows="5"></textarea>
         <button type="submit">POST 提交</button>
     </form>
-    <pre>{{messages}}</pre>
+
+    {% for m in messages %}
+        <p>author: {{ m.author }}</p>
+        <p>content: {{ m.content }}</p>
+    {% endfor %}
+
 </body>
 </html>
