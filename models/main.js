@@ -25,8 +25,6 @@ const load = path => {
     return data
 }
 
-// 定义一个 Model 类，基类，可以被其他类继承
-    // 返回一个 db 文件的路径（数据文件的文件名）
 class Model {
     static dbPath() {
         // 这是一个字符串形式的类名
@@ -41,7 +39,6 @@ class Model {
         return p
     }
 
-    // 获取一个类 的所有实例
     static all() {
         const path = this.dbPath()
         const models = load(path)
@@ -72,7 +69,6 @@ class Model {
         return m
     }
 
-    // 根据username 查找所有实例
     static find(key, value) {
         const all = this.all()
         log('****debug all', all)

@@ -14,12 +14,10 @@ class Todo extends Model {
         this.user_id = form.user_id
     }
      static update(form) {
-         // log('***debug0,form', form)
-         const id = Number(form.id)
+        const id = Number(form.id)
         const t = this.get(id)
-         // log('***debug1, t', t)
         t.title = form.title
-         t.save()
+        t.save()
     }
 }
 

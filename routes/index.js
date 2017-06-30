@@ -13,7 +13,6 @@ const {
 
 // 返回响应
 const index = (request) => {
-    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n'
     const headers = {
         'Content-Type': 'text/html',
     }
@@ -32,7 +31,6 @@ const  static = (request) => {
     const filename = request.query.file || 'doge.gif'
     const path = `static/${filename}`
     const body = fs.readFileSync(path)
-    // const header = 'HTTP/1.1 200 OK\r\nContent-Type: img/gif\r\n\r\n'
     const header = headerFromMapper()
 
     const h = Buffer.from(header + '\r\n')

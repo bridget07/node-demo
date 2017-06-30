@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="5be9b43a-a9b1-4b88-a0d2-39c6061aa987" name="Default" comment="" />
+=======
     <list default="true" id="5be9b43a-a9b1-4b88-a0d2-39c6061aa987" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
@@ -22,6 +25,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/todo_index.html" afterPath="$PROJECT_DIR$/templates/todo_index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.js" afterPath="$PROJECT_DIR$/utils.js" />
     </list>
+>>>>>>> a75c2b8e7d3d86f3923a7cd32a891973c678a2cb
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -359,16 +363,32 @@
       <workItem from="1498616572972" duration="507000" />
       <workItem from="1498617444429" duration="2945000" />
       <workItem from="1498620523762" duration="10504000" />
+<<<<<<< HEAD
+      <workItem from="1498695265637" duration="2177000" />
+=======
       <workItem from="1498695265637" duration="2022000" />
       <workItem from="1498701072512" duration="11145000" />
+<<<<<<< HEAD
       <workItem from="1498722954489" duration="4693000" />
       <workItem from="1498793552125" duration="1373000" />
       <workItem from="1498800859304" duration="10450000" />
+=======
+      <workItem from="1498722954489" duration="4081000" />
+>>>>>>> a75c2b8e7d3d86f3923a7cd32a891973c678a2cb
+>>>>>>> origin/master
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="43639000" />
+=======
+<<<<<<< HEAD
+    <option name="totallyTimeSpent" value="16133000" />
+=======
+    <option name="totallyTimeSpent" value="31204000" />
+>>>>>>> a75c2b8e7d3d86f3923a7cd32a891973c678a2cb
+>>>>>>> origin/master
   </component>
   <component name="ToolWindowManager">
     <frame x="185" y="26" width="1122" height="747" extended-state="0" />
