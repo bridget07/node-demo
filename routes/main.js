@@ -17,7 +17,7 @@ const env = new nunjucks.Environment(loader)
 const currentUser = request => {
     const s = request.cookies.session || ''
     if (s.length > 0) {
-        const r = session.decrypto(s)
+        const r = session.decrypt(s)
         const uid = r.uid
         const u = User.findOne('id', uid)
         return u

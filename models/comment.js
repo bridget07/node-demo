@@ -1,12 +1,14 @@
 const Model = require('./main')
 const User = require('./user')
+const Weibo = require('./weibo')
 
-class Weibo extends Model {
+class Comment extends Model {
     constructor(form={}, user_id=-1) {
         super()
         this.id = form.id
-        this.content = form.content || ''
+        thid.content = form.content || ''
         this.user_id = Number(form.user_id || user_id)
+        this.weibo_id = Number(form.weibo_id || -1)
     }
 
     user() {
@@ -14,11 +16,10 @@ class Weibo extends Model {
         return u
     }
 
-    comments() {
-        const Comment = require('./comment')
-        const cs = Comment.find('weibo_id', this.id)
-        return cs
+    weibo() {
+        const w = Weibo.findOne('id', this.weibo_id)
+        return w
     }
 }
 
-module.exports = Weibo
+module.exports = Comment

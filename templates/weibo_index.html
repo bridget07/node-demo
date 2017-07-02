@@ -10,14 +10,14 @@
     </style>
 </head>
 <body>
-    <a href="/weibo/new"></a>
+    <a href="/weibo/new">写新微博</a>
     {% for w in weibos %}
         <div>
             {{ w.content }} from {{ user.username }}
             <a href="/weibo/delete?id={{ w.id }}">删除</a>
             <a href="/weibo/edit?id={{ w.id }}">修改</a>
             {#w.comments() 拿到当前微博下的所有评论#}
-            {% forc in w.comment() %}
+            {% for c in w.comments() %}
                 <div class="comment">
                     {{ c.user().username }}: {{ c.content }}
                 </div>

@@ -77,7 +77,7 @@ class Model {
 
     static find(key, value) {
         const all = this.all()
-        const models = all.fliter(m => {
+        const models = all.filter(m => {
             return m[key] === value
         })
         return models

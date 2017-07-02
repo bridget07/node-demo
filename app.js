@@ -64,7 +64,7 @@ const run = (host='', port=3000) => {
 
 
 const __main = () => {
-    run('127.0.0.1', 2300)
+    run('0.0.0.0', 2300)
 }
 
 if (require.main === module) {

@@ -12,6 +12,7 @@ class User extends Model {
         this.note = form.note || ''
     }
 
+    // user 里的 create 方法用来将密码加密，再用 model 的 create 生成 u
     static create(form={}) {
         form.password = this.saltedPassword(form.password)
         const u = super.create(form)
@@ -28,7 +29,7 @@ class User extends Model {
             return h
         }
         const hash1 = _sha1(password)
-        const hash2 = _sha1(hash + salt)
+        const hash2 = _sha1(hash1 + salt)
         return hash2
     }
 

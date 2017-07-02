@@ -43,6 +43,7 @@ const error = (request=null, code=404) => {
     return r
 }
 
+// 用户 user id  session 加密所用的 key
 const key = 'gsh'
 
 module.exports.log = log

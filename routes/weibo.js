@@ -4,7 +4,7 @@ const {
     template,
     redirect,
     loginRequired,
-    httpReponse
+    httpResponse
 } = require('./main')
 
 const User = require('../models/user')
@@ -13,18 +13,19 @@ const Comment = require('../models/comment')
 
 const index = request => {
     const user_id = Number(request.query.user_id || -1)
+    log('****debug request', request)
     const u = User.get(user_id)
     const weibos = Weibo.find('user_id', u.id)
     const body = template('weibo_index.html', {
         weibos: weibos,
         user: u
     })
-    return httpReponse(body)
+    return httpResponse(body)
 }
 
 const create = request => {
     const body = template('weibo_new.html')
-    return httpReponse(body)
+    return httpResponse(body)
 }
 
 const add = request => {
@@ -52,7 +53,7 @@ const edit = request => {
         const body = template('weibo_edit.html', {
             weibo: w
         })
-        return httpReponse(body)
+        return httpResponse(body)
     }
 }
 
@@ -75,7 +76,7 @@ const routeWeibo = {
     '/weibo/add': add,
     '/weibo/delete': del,
     '/weibo/edit': edit,
-    '/weibo/update': update,
+    // '/weibo/update': update,
     '/comment/add': loginRequired(commentAdd)
 }
 

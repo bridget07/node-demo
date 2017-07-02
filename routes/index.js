@@ -5,10 +5,10 @@ const fs = require('fs')
 const { log } = require('../utils')
 
 const {
-    session,
+    headerFromMapper,
     currentUser,
     template,
-    headerFromMapper
+    httpResponse
 } = require('./main')
 
 // 返回响应
@@ -18,7 +18,7 @@ const index = (request) => {
     let body = template('index.html', {
         username: username
     })
-    return httpReponse(body)
+    return httpResponse(body)
 }
 
 // 静态资源的处理(图片)

@@ -3,7 +3,7 @@ const { log } = require('./utils')
 class Request {
     // 构造器函数
     constructor(raw) {
-        const { method, path, query, headers, body } = this._parsedRaw(raw)
+        const { method, path, query, headers, body } = this.constructor._parsedRaw(raw)
         this.raw = raw
         this.method = method
         this.path = path
