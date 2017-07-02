@@ -1,14 +1,8 @@
-/**
- * Created by gsh on 2017/6/29.
- */
-const fs = require('fs')
 const { log } = require('../utils')
 
 const {
-    session,
-    currentUser,
     template,
-    headerFromMapper
+    httpResponse
 } = require('./main')
 
 const Message = require('../models/message')
@@ -19,19 +13,12 @@ const message = request => {
         const form = request.form()
         const m = Message.create(form)
         m.save()
-        log('m***debug  save', m)
     }
     const ms = Message.all()
     const body = template('message.html', {
         messages: ms,
     })
-    const headers = {
-        'Content-Type': 'text/html'
-    }
-    const header = headerFromMapper(headers)
-    const r = header + '\r\n' + body
-    // log('debug session message', session)
-    return r
+    return httpResponse(body)
 }
 
 const routeMessage = {

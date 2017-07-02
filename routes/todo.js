@@ -1,40 +1,27 @@
-/**
- * Created by gsh on 2017/6/29.
- */
 const { log } = require('../utils')
 const {
-    session,
     currentUser,
     template,
-    headerFromMapper,
+    httpResponse,
     redirect,
     loginRequired,
 } = require('./main')
 const Todo = require('../models/todo')
 
 const index = request => {
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-
     const u = currentUser(request)
-    log('*****debug, u', u)
     const models = Todo.find('user_id', u.id)
     log('*****debug, models', models)
     const body = template('todo_index.html', {
         todos: models,
     })
-
-    const header = headerFromMapper(headers)
-    const r = header + '\r\n' + body
-    return r
+    return httpResponse(body)
 }
 
 const add = request => {
     if (request.method === 'POST') {
         const form = request.form()
         const u = currentUser(request)
-        form.user_id = u.id
         const t = Todo.create(form)
         t.save()
     }
@@ -44,16 +31,11 @@ const add = request => {
 const edit = request => {
     const u = currentUser(request)
     const id = Number(request.query.id)
-    const headers = {
-        'Content-Type': 'text/html',
-    }
     const todo = Todo.get(id)
     const body = template('todo_edit.html', {
         todo: todo
     })
-    const header = headerFromMapper(headers)
-    const r = header + '\r\n' + body
-    return r
+    return httpResponse(body)
 }
 
 const del = request => {
@@ -65,7 +47,7 @@ const del = request => {
 const update = request => {
     if (request.method === 'POST') {
         const form = request.form()
-        form.id = request.headers.Referer.split('=')[1]
+        // form.id = request.headers.Referer.split('=')[1]
         // log('***debug request', request)
         Todo.update(form)
     }
@@ -73,7 +55,7 @@ const update = request => {
 }
 
 const routeMapper = {
-    '/todo': loginRequired(index),
+    '/todo': index,
     '/todo/add': add,
     '/todo/delete': del,
     '/todo/edit': edit,

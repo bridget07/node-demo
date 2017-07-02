@@ -10,25 +10,12 @@ const routeIndex = require('./routes/index')
 const routeUser = require('./routes/user')
 const routeMessage= require('./routes/message')
 const routeTodo = require('./routes/todo')
-
-
-
-// 出现错误的响应函数
-const error = (request=null, code=404) => {
-    const e = {
-        404: 'HTTP/1.1 404 NOT FOUND\r\n\r\n<h1>Not Found</h1>'
-    }
-    const r = e[code] || ''
-    return r
-}
-
+const routeWeibo = require('./routes/weibo')
 
 // 解析请求原文， 找到对应的响应函数
 const responseFor = (raw, request) => {
-    // log('***debug raw request,', raw, request)
-    // 找到对应的响应函数
     const route = {}
-    const routes = Object.assign(route, routeIndex, routeUser, routeMessage, routeTodo)
+    const routes = Object.assign(route, routeIndex, routeUser, routeMessage, routeTodo, routeWeibo)
     const response =  routes[request.path] || error
     const resp = response(request)
     return resp
@@ -38,19 +25,15 @@ const processRequest = (data, socket) => {
     const raw = data.toString('utf8')
     const request = new Request(raw)
     const ip = socket.localAddress
+    log('请求开始')
     log(`ip and request, ${ip}\n${raw}`)
-
+    log('请求结束')
     const response = responseFor(raw, request)
     socket.write(response)
     socket.destroy()
 }
 
 
-/*
- // 服务器的 host 为空字符串, 表示接受任意 ip 地址的连接
- const host = ''
- const port = 2001
- */
 const run = (host='', port=3000) => {
     const server = new net.Server()
     // 开启服务器监听连接

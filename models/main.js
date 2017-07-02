@@ -29,8 +29,6 @@ class Model {
     static dbPath() {
         // 这是一个字符串形式的类名
         const classname = this.name.toLowerCase()
-        // const path = `${classname}.txt`
-        // return path
         //***************
         const path = require('path')
         const filename = `${classname}.txt`
@@ -39,12 +37,19 @@ class Model {
         return p
     }
 
+    //************************
+    static _newFromDict(dict) {
+        const cls = this
+        const m = new this(dict)
+        return m
+    }
+
     static all() {
         const path = this.dbPath()
         const models = load(path)
         const ms = models.map(item => {
             const cls = this
-            const instance = cls.create(item)
+            const instance = cls._newFromDict(item)
             return instance
         })
         return ms
@@ -54,6 +59,7 @@ class Model {
     static create(form={}) {
         const cls = this
         const instance = new cls(form)
+        instance.save()
         return instance
     }
 
@@ -71,18 +77,14 @@ class Model {
 
     static find(key, value) {
         const all = this.all()
-        log('****debug all', all)
-        let models = []
-        all.forEach(m => {
-            if (m[key] === value) {
-                models.push(m)
-            }
+        const models = all.fliter(m => {
+            return m[key] === value
         })
         return models
     }
 
     static get(id) {
-        id = parseInt(id, 10)
+        // id = parseInt(id, 10)
         // log('')
         return this.findOne('id', id)
     }
@@ -97,17 +99,13 @@ class Model {
                 const last = models[models.length - 1]
                 this.id = last.id + 1
             } else {
-                this.id = 0
+                this.id = 1
             }
             models.push(this)
         } else {
             // 这条数据原本有ID信息，则替换掉相同id 的之前内容
-            let index = -1
-            models.forEach((m, i) => {
-                if (m.id === this.id) {
-                    index = i
-                    return false
-                }
+            const index = models.findIndex(e => {
+                return e.id === this.id
             })
             if (index > -1) {
                 models[index] = this

@@ -1,6 +1,4 @@
 const { log } = require('./utils')
-// 请求的原始信息
-
 
 class Request {
     // 构造器函数
@@ -37,9 +35,7 @@ class Request {
 
     // 一般使用 post 方法提交的数据会放在 request body 中
     // 使用 get 方法提交的数据会放在 path 中
-    // 比如 GET /top250?start=25&filter= HTTP/1.1
-    // 封装一个 form 方法, 直接获取解析之后的数据(以 object 的形式), 原本的形式是a=b&c=d&e=f
-
+    // 封装一个 form 方法, 直接获取解析之后的数据(以 object 的形式)
     form() {
         // 浏览器在发送 form 表单的数据时, 会自动使用 encodeURIComponent 编码
         const body = decodeURIComponent(this.body)
@@ -53,7 +49,7 @@ class Request {
     }
 
     // 解析 path
-    _parsedPath (path) {
+    static _parsedPath (path) {
         const index = path.indexOf('?')
         if (index === -1) {
             return {
@@ -79,7 +75,7 @@ class Request {
     }
 
     // 解析请求原始信息
-    _parsedRaw (raw) {
+    static _parsedRaw (raw) {
     // const r = raw
     const [method, url, ..._] = raw.split(' ')
     const { path, query } = this._parsedPath(url)

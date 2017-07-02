@@ -1,12 +1,9 @@
 const fs = require('fs')
 const { log } = require('../utils')
 const nunjucks = require('nunjucks')
-
+const crypto = require('crypto')
 const User = require('../models/user')
-
-
-// 保存 session 信息
-const session = {}
+const session = require('../models/session')
 
 // 配置 nunjucks
 const loader = new nunjucks.FileSystemLoader('templates', {
@@ -18,10 +15,16 @@ const env = new nunjucks.Environment(loader)
 
 // 验证当前用户
 const currentUser = request => {
-    const id = request.cookies.user || ''
-    const username = session[id]
-    const u = User.findOne('username', username)
-    return u
+    const s = request.cookies.session || ''
+    if (s.length > 0) {
+        const r = session.decrypto(s)
+        const uid = r.uid
+        const u = User.findOne('id', uid)
+        return u
+    } else {
+        return null
+    }
+
 }
 
 // 读取 html 文件的函数
@@ -42,6 +45,17 @@ const headerFromMapper = (mapper={}, code=200) => {
     return header
 }
 
+const httpResponse = (body, headers=null) => {
+    let mapper = {
+        'Content-Type': 'text/html',
+    }
+    if (headers !== null) {
+        mapper = Object.assign(mapper, headers)
+    }
+    const header = headerFromMapper(mapper)
+    const r = header + '\r\n' + body
+    return r
+}
 
 // 静态资源的处理(图片)
 const  static = (request) => {
@@ -80,11 +94,11 @@ const loginRequired = routeFunc => {
 
 
 module.exports = {
-    session: session,
     currentUser: currentUser,
     template: template,
     headerFromMapper:headerFromMapper,
     static: static,
     redirect: redirect,
-    loginRequired: loginRequired
+    loginRequired: loginRequired,
+    httpResponse: httpResponse,
 }

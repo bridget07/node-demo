@@ -1,6 +1,3 @@
-/**
- * Created by gsh on 2017/6/29.
- */
 const { log } = require('../utils')
 
 const Model = require('./main')

@@ -1,33 +1,28 @@
-/**
- * Created by gsh on 2017/6/29.
- */
 const { log, randomStr } = require('../utils')
 const {
-    session,
     currentUser,
     template,
     loginRequired,
-    headerFromMapper,
+    httpResponse,
 } = require('./main')
-
+const session = require('../models/session')
 const User = require('../models/user')
 
 
 // login
 const login = request => {
     let result
-    const headers = {
-        'Content-Type': 'text/html',
-    }
+    const headers = {}
     if (request.method === 'POST') {
         // 获取表单中的数据， 生成 User 实例
         const form = request.form()
-        if (User.validateLogin(form)) {
-            const u = User.create(form)
-            u.save()
-            const sid = randomStr()
-            session[sid] = u.username
-            headers['Set-Cookie'] = `user=${sid}`
+        const u = User.findOne('username', form.username)
+        if (u !== null && u.validateAuth(form)) {
+            const form =  {
+                uid: u.id
+            }
+            const s = session.encrypt(form)
+            headers['Set-Cookie'] = `session=${s}`
             result = '登录成功'
         } else {
             result = '用户名或者密码错误'
@@ -42,9 +37,7 @@ const login = request => {
         username: username,
         result: result,
     })
-    const header = headerFromMapper(headers)
-    const r = header + '\r\n' + body
-    return r
+    return httpResponse(body, headers)
 }
 
 // register
@@ -52,11 +45,9 @@ const register = request => {
     let result
     if (request.method === 'POST') {
         const form = request.form()
-        if (User.validateRegister(form)) {
-            const u = User.create(form)
-            // 如果合法，就保存到文件中
-            u.save()
-            result = `注册成功`
+        const u = User.register(form)
+        if (u !== null) {
+            result = '注册成功'
         } else {
             result = '用户名或者密码长度必须大于2'
         }
@@ -68,25 +59,15 @@ const register = request => {
         result: result,
         users: us
     })
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-    const header = headerFromMapper(headers)
-    const r = header + '\r\n' + body
-    return r
+    return httpResponse(body)
 }
 
 const profile = request => {
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-    const header = headerFromMapper(headers)
     const u = currentUser(request)
     let body = template('profile.html', {
         user: u
     })
-    const r = header + '\r\n' + body
-    return r
+    return httpResponse(body)
 }
  const routeUser = {
     '/login': login,

@@ -13,17 +13,12 @@ const {
 
 // 返回响应
 const index = (request) => {
-    const headers = {
-        'Content-Type': 'text/html',
-    }
-    const header = headerFromMapper(headers)
-    let body = template('index.html')
     const u = currentUser(request)
     const username = u ? u.username: ''
-    body = body.replace('{{username}}', username)
-    const r = header + '\r\n' + body
-    log('debug  index', request.method)
-    return r
+    let body = template('index.html', {
+        username: username
+    })
+    return httpReponse(body)
 }
 
 // 静态资源的处理(图片)
