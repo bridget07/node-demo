@@ -50,6 +50,7 @@ class User extends Model {
     }
 
     static register(form={}) {
+        // log('*****debug form', form)
         const { username, password } = form
         const validForm = username.length > 2 && password.length > 2
         const uniqueUser = User.findOne('username', username) === null

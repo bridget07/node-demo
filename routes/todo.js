@@ -11,7 +11,7 @@ const Todo = require('../models/todo')
 const index = request => {
     const u = currentUser(request)
     const models = Todo.find('user_id', u.id)
-    log('*****debug, models', models)
+    log('*****debug, models', models, u)
     const body = template('todo_index.html', {
         todos: models,
     })
@@ -21,6 +21,7 @@ const index = request => {
 const add = request => {
     if (request.method === 'POST') {
         const form = request.form()
+        log('*****debug form', form)
         const u = currentUser(request)
         const t = Todo.create(form)
         t.save()
