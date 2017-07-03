@@ -57,8 +57,7 @@ class Model {
 
     // *************************8
     static create(form={}) {
-        const cls = this
-        const instance = new cls(form)
+        const instance = new this(form)
         instance.save()
         return instance
     }

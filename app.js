@@ -16,7 +16,8 @@ const routeWeibo = require('./routes/weibo')
 const responseFor = (raw, request) => {
     const route = {}
     const routes = Object.assign(route, routeIndex, routeUser, routeMessage, routeTodo, routeWeibo)
-    const response =  routes[request.path] || error
+    log('***debug request.path', request.path)
+    const response = routes[request.path] || error
     const resp = response(request)
     return resp
 }

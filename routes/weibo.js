@@ -13,9 +13,10 @@ const Comment = require('../models/comment')
 
 const index = request => {
     const user_id = Number(request.query.user_id || -1)
-    log('****debug request', request)
+    // log('****debug request', request)
     const u = User.get(user_id)
     const weibos = Weibo.find('user_id', u.id)
+    log('****debug weibos', weibos)
     const body = template('weibo_index.html', {
         weibos: weibos,
         user: u
@@ -31,6 +32,8 @@ const create = request => {
 const add = request => {
     const u = currentUser(request)
     const form = request.form()
+    // log('****debug form', form)
+    // create 加上 id 信息
     const w = Weibo.create(form)
     w.user_id = u.id
     w.save()
@@ -58,15 +61,19 @@ const edit = request => {
 }
 
 const commentAdd = request => {
-    const u = currentUser(form)
+    const u = currentUser(request)
     const form = request.form()
+    // form 里本身带有weibo——id 和 content
     const c = Comment.create(form)
+    // 再加上 user_id
     c.user_id = u.id
     c.save()
 
+    // 通过评论找到当前微博
     const w = c.weibo()
-
+    // 通过这条微博找到发微博的人
     const user = w.user()
+    log('****debug w user', w, user)
     return redirect(`/weibo/index?user_id=${user.id}`)
 }
 

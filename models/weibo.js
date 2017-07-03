@@ -10,6 +10,8 @@ class Weibo extends Model {
     }
 
     user() {
+        // weibo 里的user_id 就是 用户 的id
+        // 通过 weibo 里的user_id 来找到 用户(发微博的人)
         const u = User.findOne('id', this.user_id)
         return u
     }
