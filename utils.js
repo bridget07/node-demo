@@ -8,6 +8,7 @@ const formattedTime = () => {
     const minutes = d.getMinutes()
     const seconds = d.getSeconds()
     const t = `${hours}:${minutes}:${seconds}`
+    return t
 }
 
 
